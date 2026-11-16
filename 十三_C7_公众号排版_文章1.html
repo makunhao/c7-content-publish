@@ -1,0 +1,42 @@
+<!doctype html><html lang="zh"><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>十三_C7_文章1_数据条数</title>
+<body style="margin:0;background:#fff">
+<section style="max-width:680px;margin:0 auto;padding:24px 18px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Noto Sans SC',sans-serif">
+<p style="margin:0 0 20px;font-size:22px;line-height:1.4;font-weight:700;color:#1f3a5f">20 条消息，我只解析出 18 条：数据对不上时，先别改代码</p>
+<p style="margin:0 0 18px;font-size:15px;line-height:1.85;color:#222">上周做班级提交仪表盘，第一步就卡住了。</p>
+<p style="margin:0 0 18px;font-size:15px;line-height:1.85;color:#222">源文件里有 20 个消息块。我的解析脚本跑完，输出 18 条记录。</p>
+<p style="margin:0 0 18px;font-size:15px;line-height:1.85;color:#222">第一反应是脚本有 bug。第二反应是&quot;差 2 条，补上就行&quot;。</p>
+<p style="margin:0 0 18px;font-size:15px;line-height:1.85;color:#222">两个反应都错了。</p>
+<section style="margin:28px 0 12px;padding-left:10px;border-left:4px solid #1f3a5f"><p style="margin:0;font-size:18px;font-weight:700;color:#1f3a5f;line-height:1.5">一、先数源里本来有多少条</p></section>
+<p style="margin:0 0 18px;font-size:15px;line-height:1.85;color:#222">我把没有解析出学生姓名的块单独打印出来，发现两条都是老师公告：一条是 10 月 13 日的截止提醒，一条是群公告图片。</p>
+<p style="margin:0 0 18px;font-size:15px;line-height:1.85;color:#222">它们本来就不是提交记录。</p>
+<p style="margin:0 0 18px;font-size:15px;line-height:1.85;color:#222"><strong>18 不是漏了 2 条，是源里只有 18 条评审。</strong></p>
+<p style="margin:0 0 18px;font-size:15px;line-height:1.85;color:#222">如果我当时&quot;补上 2 条让数据完整&quot;，这张仪表盘从第一屏开始就是假的。而这类作业的第一评分项，恰好是&quot;数据完整性&quot;。</p>
+<p style="margin:0 0 18px;font-size:15px;line-height:1.85;color:#222">这里有一个反直觉的判断：</p>
+<section style="margin:0 0 18px;padding:12px 16px;background:#f4f4f6;border-left:3px solid #1f3a5f;border-radius:0 8px 8px 0"><p style="margin:0;font-size:15px;line-height:1.8;color:#444">解析结果比源少，通常是格式问题；<br>解析结果比源多，几乎一定是 bug。</p></section>
+<p style="margin:0 0 18px;font-size:15px;line-height:1.85;color:#222">因为解析器不会凭空造出记录，但会把公告、系统消息、引用块误判成记录。</p>
+<p style="margin:0 0 18px;font-size:15px;line-height:1.85;color:#222">所以每次数字对不上，我先问的不是&quot;怎么补&quot;，而是&quot;源里本来有多少&quot;。</p>
+<section style="margin:28px 0 12px;padding-left:10px;border-left:4px solid #1f3a5f"><p style="margin:0;font-size:18px;font-weight:700;color:#1f3a5f;line-height:1.5">二、状态怎么定义，比数据怎么展示更重要</p></section>
+<p style="margin:0 0 18px;font-size:15px;line-height:1.85;color:#222">第二道坎是&quot;完成状态&quot;。</p>
+<p style="margin:0 0 18px;font-size:15px;line-height:1.85;color:#222">我一开始想用 AI 初评分数分段：85 分以上算完整。很快否掉了——分数高不等于文件齐，两件事。</p>
+<p style="margin:0 0 18px;font-size:15px;line-height:1.85;color:#222">第二个方案是&quot;有记录就算完整&quot;。这样所有人都是绿色的，图很好看，但没有任何信息量。</p>
+<p style="margin:0 0 18px;font-size:15px;line-height:1.85;color:#222">最后选了一个笨办法：去评审的&quot;不足&quot;段落里找缺件词。</p>
+<ul style="margin:0 0 18px;padding-left:22px;font-size:15px;line-height:1.85;color:#222"><li style='margin:6px 0'>出现&quot;缺少 / 未提交 / 未见 / 没有&quot; → 标为部分提交</li><li style='margin:6px 0'>否则 → 标为完整</li></ul>
+<p style="margin:0 0 18px;font-size:15px;line-height:1.85;color:#222">它不完美，会把&quot;提到缺少但已补交&quot;误判。但它测的是&quot;缺没缺&quot;，不是&quot;好不好&quot;。</p>
+<p style="margin:0 0 18px;font-size:15px;line-height:1.85;color:#222"><strong>指标一旦混了两件事，后面所有结论都不可信。</strong></p>
+<p style="margin:0 0 18px;font-size:15px;line-height:1.85;color:#222">这也是我做这张表时最坚持的一点：Excel 里单独留了一页&quot;字段说明&quot;，把判定规则、数据来源、局限性全写出来。别人可以不同意我的结论，但必须能看懂我的口径。</p>
+<section style="margin:28px 0 12px;padding-left:10px;border-left:4px solid #1f3a5f"><p style="margin:0;font-size:18px;font-weight:700;color:#1f3a5f;line-height:1.5">三、热力图的第一版，列顺序是错的</p></section>
+<p style="margin:0 0 18px;font-size:15px;line-height:1.85;color:#222">网站做出来，截图一看：挑战列的顺序是 C1、C2、C3、C4、C2A、C2G、C4A、C4C。</p>
+<p style="margin:0 0 18px;font-size:15px;line-height:1.85;color:#222">原因很简单：我按&quot;字符串长度 + 字母&quot;排序，单字符的 C1–C4 全跑到前面，带后缀的 C2A 掉到最后。</p>
+<p style="margin:0 0 18px;font-size:15px;line-height:1.85;color:#222">改法不是手动调列，而是换排序键：先取编号数字，再取后缀字母。这样 C2 → C2A → C2G → C3，数据再加也不会乱。</p>
+<p style="margin:0 0 18px;font-size:15px;line-height:1.85;color:#222">同一个错误在 Excel 里也出现了——因为两处用了同一段复制来的逻辑。</p>
+<p style="margin:0 0 18px;font-size:15px;line-height:1.85;color:#222"><strong>一个 bug 出现在两个产物里，说明它不是手误，是设计里有一个共享的错误前提。</strong></p>
+<section style="margin:28px 0 12px;padding-left:10px;border-left:4px solid #1f3a5f"><p style="margin:0;font-size:18px;font-weight:700;color:#1f3a5f;line-height:1.5">四、我最后交付了什么</p></section>
+<ul style="margin:0 0 18px;padding-left:22px;font-size:15px;line-height:1.85;color:#222"><li style='margin:6px 0'>18 条真实记录，11 名学生，8 个挑战</li><li style='margin:6px 0'>一份 7 页的 Excel（总览 / 按学生 / 按挑战 / 时间线 / 缺失项 / 字段说明 / 自查扫描）</li><li style='margin:6px 0'>一个单文件网页，双击就能打开，能筛选、能搜索、点热力图能跳到学生明细</li><li style='margin:6px 0'>一个扫描器：给它一个提交目录，按命名规范自动判断谁交了什么、缺什么</li></ul>
+<p style="margin:0 0 18px;font-size:15px;line-height:1.85;color:#222">没有做&quot;下载原文件&quot;按钮。因为原始文件不在本机，放了就是 404。</p>
+<section style="margin:28px 0 12px;padding-left:10px;border-left:4px solid #1f3a5f"><p style="margin:0;font-size:18px;font-weight:700;color:#1f3a5f;line-height:1.5">五、三个可以带走的判断</p></section>
+<ol style="margin:0 0 18px;padding-left:22px;font-size:15px;line-height:1.85;color:#222"><li style='margin:6px 0'><strong>数字对不上，先数源。</strong> 低于源是格式问题，高于源才是 bug。</li><li style='margin:6px 0'><strong>一个指标只测一件事。</strong> 分数是分数，完整性是完整性；混在一起，图越漂亮越危险。</li><li style='margin:6px 0'><strong>同一个错误出现两次，改设计，不要改参数。</strong></li></ol>
+<p style="margin:0 0 18px;font-size:15px;line-height:1.85;color:#222">下一篇我会写：怎么用 9 个测试，把一个&quot;第二大脑&quot;从想法跑到能用，以及中间发现自己会创建&quot;幽灵技能&quot;的过程。</p>
+<p style="margin:0 0 18px;font-size:15px;line-height:1.85;color:#222">如果你也在做类似的数据整理，欢迎留言说说你遇到的&quot;条数对不上&quot;。</p>
+</section></body></html>
